@@ -104,6 +104,7 @@ El servidor está construido con **Spring Boot 3** y utiliza **Maven** para la g
             ```
                mvnw.cmd spring-boot:run
             ```
+   ---
    API: http://localhost:8080
    Swagger UI: http://localhost:8080/swagger-ui.html
 
