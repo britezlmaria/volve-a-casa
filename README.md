@@ -52,10 +52,152 @@ El servidor está construido con **Spring Boot 3** y utiliza **Maven** para la g
 * **Maven 3.8+**
 * Base de datos configurada en el archivo `application.properties`.
 
-#### Pasos para ejecutar:
-1. Dirigite al directorio raíz del backend.
-2. Configura tus credenciales de base de datos en `src/main/resources/application.properties`.
-3. Ejecuta los comandos:
+### Pasos:
+   1. Clonar el Repositorio
+      ```bash
+      git clone https://github.com/Vicen621-Facultad/volve-a-casa.git
+      cd volve-a-casa
+   2. Crear un archivo .env en la raíz del proyecto con el siguiente contenido:
+      # Configuración de PostgreSQL
+      POSTGRES_USER=admin
+      POSTGRES_PASSWORD=admin
+      POSTGRES_DB=grupo01
+      
+      # Configuración de pgAdmin
+      PGADMIN_EMAIL=test@gmail.com
+      PGADMIN_PASSWORD=admin
+      
+      # Configuración de Email (Gmail SMTP)
+      MAIL_USERNAME=volveacasattps@gmail.com
+      MAIL_PASSWORD=wcvt vuvk gaok dudp
+      
+      # Bot de Telegram
+      TELEGRAM_BOT_TOKEN=tu-telegram-bot-token
+      
+      # APIs de IA
+      GROQ_API_KEY=tu-groq-api-key
+      OPENAI_KEY=tu-openai-api-key
+
+##  Configuración del Entorno
+   ###  Backend (Spring Boot)
+   1. Levantar servicios de infraestructura (PostgreSQL, pgAdmin):
+         ```bash
+         docker-compose up -d
+   2. Navegar al directorio del backend:
+      ```bash
+         cd backend
+   3. Compilar el proyecto con Maven:
+         Linux/macOS:
+            ```
+               ./mvnw clean install
+            ```
+         Windows:
+            ```
+               ./mvnw clean install
+            ```
+   4. Ejecutar la aplicacion:
+        Linux/macOS:
+            ```
+               ./mvnw spring-boot:run
+            ```
+         Windows:
+            ```
+               mvnw.cmd spring-boot:run
+            ```
+   API: http://localhost:8080
+   Swagger UI: http://localhost:8080/swagger-ui.html
+
+
+   ### Frontend (Angular)
+
+   1. Navegar al directorio del frontend:
+      ```bash
+         cd frontend
+   2. Instalar dependencias
+      ```bash
+         npm install
+   3. Ejecutar el servidor de desarrollo:
+      ```bash
+         ng serve
+   URL: http://localhost:4200
+
+
+   ##  Servicios Docker
+
+Una vez ejecutado `docker-compose up -d`, los siguientes servicios estarán disponibles:
+
+| Servicio    | Puerto | Acceso               | Credenciales                                      |
+|------------|--------|----------------------|---------------------------------------------------|
+| PostgreSQL | 5433   | localhost:5433       | User: admin / Pass: admin / DB: grupo01           |
+| pgAdmin    | 5050   | http://localhost:5050| Email: test@gmail.com / Pass: admin               |
+
+### Conectar pgAdmin a PostgreSQL
+
+1. Acceder a http://localhost:5050 e iniciar sesión.
+2. Agregar nuevo servidor:
+   - **Name:** volve-a-casa  
+   - **Host:** db  
+   - **Port:** 5432  
+   - **Username / Password:** admin / admin  
+   - **Database:** grupo01  
+
+---
+
+##  Estructura del Proyecto
+
+   ```plaintext
+   volve-a-casa/
+   ├── backend/                              # Backend Spring Boot
+   │   ├── src/main/java/.../
+   │   │   ├── config/               # Security, Telegram, Swagger
+   │   │   ├── controllers/          # REST Controllers & DTOs
+   │   │   ├── persistence/          # Entities & Repositories (PostGIS)
+   │   │   ├── security/             # JWT & Auth
+   │   │   ├── services/             # Lógica de negocio e IA
+   │   │   └── telegram/             # Bot de Telegram
+   │   └── pom.xml                           # Configuración Maven
+   ├── frontend/                             # Frontend Angular
+   │   ├── src/app/
+   │   │   ├── core/                 # Guards, Interceptors, Services
+   │   │   ├── features/             # Admin, Auth, Mascota, Perfil
+   │   │   └── shared/               # Componentes reutilizables
+   │   └── package.json              # Dependencias npm
+   ├── docker-compose.yml              # Orquestación de servicios
+   └── .env                            # Variables de entorno
+   ```
+##  Usuario por Defecto
+
+Al iniciar por primera vez, el `DataInitializer` crea automáticamente un administrador:
+
+- **Email:** admin@volveacasa.com  
+- **Password:** admin123  
+- **Rol:** Administrador  
+
+---
+
+##  Funcionalidades Principales
+
+### Gestión de Mascotas e IA
+- **Registro:** Carga de fotos y descripción detallada de mascotas perdidas/encontradas.
+- **Matching Inteligente:** Uso de GROQ API para comparar características y sugerir coincidencias automáticas.
+
+### Sistema de Avistamientos y Geo
+- **Geolocalización:** Reportes con mapas interactivos (Leaflet).
+- **Consultas Espaciales:** Uso de PostGIS para filtrado por zona geográfica y cálculo de distancias.
+
+### Notificaciones y Seguridad
+- **Alertas:** Bot de Telegram y notificaciones por Spring Mail.
+- **Seguridad:** Autenticación basada en JWT y contraseñas hasheadas con BCrypt.
+
+---
+
+##  Comandos Útiles
+
+### Docker
    ```bash
-   mvn clean install
-   mvn spring-boot:run
+   docker-compose ps
+   docker-compose logs -f
+   docker-compose restart
+   docker-compose down -v
+
+
